@@ -16,6 +16,11 @@ import java.util.*
  */
 class CustomContactManager {
     companion object {
+        const val CONTACT_MIME_TYPE_MESSAGE =
+            "vnd.android.cursor.item/vnd.com.yueban.customcontact.message"
+        const val CONTACT_MIME_TYPE_CALL =
+            "vnd.android.cursor.item/vnd.com.yueban.customcontact.call"
+
         fun addContact(
             name: String?,
             phoneNumber: String
@@ -71,6 +76,38 @@ class CustomContactManager {
                     ContactsContract.Data.MIMETYPE,
                     ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE
                 ).withValue(ContactsContract.CommonDataKinds.Phone.NUMBER, phoneNumber).build()
+            )
+
+            // custom mimeType
+            ops.add(
+                ContentProviderOperation.newInsert(
+                    addCallerIsSyncAdapterParameter(
+                        ContactsContract.Data.CONTENT_URI
+                    )
+                ).withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID, 0).withValue(
+                    ContactsContract.Data.MIMETYPE,
+                    CONTACT_MIME_TYPE_MESSAGE
+                ).withValue(ContactsContract.Data.DATA1, phoneNumber).withValue(
+                    ContactsContract.Data.DATA2,
+                    "message: $phoneNumber"
+                ).build()
+            )
+
+            ops.add(
+                ContentProviderOperation.newInsert(
+                    addCallerIsSyncAdapterParameter(ContactsContract.Data.CONTENT_URI)
+                )
+                    .withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID, 0)
+                    .withValue(
+                        ContactsContract.Data.MIMETYPE,
+                        CONTACT_MIME_TYPE_CALL
+                    )
+                    .withValue(ContactsContract.Data.DATA1, phoneNumber)
+                    .withValue(
+                        ContactsContract.Data.DATA2,
+                        "call: $phoneNumber"
+                    )
+                    .build()
             )
 
             try {

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.yueban.customcontact">
 
     <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS" />
@@ -24,6 +25,16 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".DetailActivity">
+            <intent-filter tools:ignore="AppLinkUrlError">
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:mimeType="vnd.android.cursor.item/vnd.com.yueban.customcontact.message" />
+                <data android:mimeType="vnd.android.cursor.item/vnd.com.yueban.customcontact.call" />
+            </intent-filter>
+        </activity>
 
         <service
             android:name=".account.AuthenticatorService"
@@ -36,7 +47,6 @@
                 android:name="android.accounts.AccountAuthenticator"
                 android:resource="@xml/auth" />
         </service>
-
         <service
             android:name=".contact.ContactsSyncAdapterService"
             android:exported="true">
@@ -47,6 +57,9 @@
             <meta-data
                 android:name="android.content.SyncAdapter"
                 android:resource="@xml/sync_contacts" />
+            <meta-data
+                android:name="android.provider.CONTACTS_STRUCTURE"
+                android:resource="@xml/contact_structure" />
         </service>
     </application>
 
