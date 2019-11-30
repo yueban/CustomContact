@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">CustomContact</string>
 
+    <!-- account -->
+    <string name="account_name">Custom Account</string>
+    <string name="account_type">com.yueban.customcontact</string>
 </resources>
